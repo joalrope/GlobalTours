@@ -2,8 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using API.Data;
-using API.Entities;
+using Core.Entities;
+using Infrastructure.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -22,16 +22,15 @@ namespace API.Controllers
     [HttpGet]
     public async Task<ActionResult<List<Place>>> GetPlaces()
     {
-
       var Places = await _db.Place.ToListAsync();
       return Ok(Places);
     }
 
     [HttpGet("{id}")]
-    public string GetPlace(int id)
+    public async Task<ActionResult<Place>> GetPlace(int id)
     {
-      var Place = _db.Place.First(id);
-      return $"Retornara el lugar con Id: {id}";
+      var Place = await _db.Place.FindAsync(id);
+      return Ok(Place);
     }
   }
 }
